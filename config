@@ -36,7 +36,7 @@ bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Shift+q kill
 
 # start menu launcher
-bindsym $mod+d exec 'rofi -show run'
+bindsym $mod+d exec rofi -show run
 
 # change focus
 bindsym $mod+j focus left
@@ -112,7 +112,7 @@ set $ww9 "9 "
 set $ww10 "10 "
 
 set $screen0 HDMI-0
-set $screen1 VGA-0
+set $screen1 DVI-I-0
 
 workspace $w1 output $screen0
 workspace $w2 output $screen0
@@ -185,8 +185,8 @@ bindsym Mod3+Shift+0 move container to workspace $ww10
 assign [class="Firefox"] $w1
 assign [class="Steam"] $w8
 assign [class="Mist"] $w9
-assign [class="Telegram"] $w10
-assign [class="Spotify"] $ww1
+assign [class="telegram-desktop"] $w10
+assign [class="spotify"] $ww1
 assign [class="chromium"] $ww2
 assign [class="Zeal"] $ww3
 
