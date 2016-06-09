@@ -1,10 +1,15 @@
 #!/bin/sh
- 
+
 # Coloring the output
 healthy='#64DD17'
 hot='#DD2C00'
 color='#fff'
 accent='#00E5FF'
+bat100="#76FF03"
+bat75="#C6FF00"
+bat50="#FFFF00"
+bat25="#FF9100"
+bat0="#DD2C00"
 
 # Variables
 cpu_healthy=60
@@ -18,7 +23,9 @@ fi
 # Set unset variables to default
 [[ -z $CPU_COMMAND ]] && CPU_COMMAND='sensors | grep "Physical id 0:" | cut -c18-19'
 [[ -z $GPU_COMMAND ]] && GPU_COMMAND='nvidia-smi -q -d TEMPERATURE | awk "/GPU Current Temp/ {print $5}" | cut -c39-40'
- 
+[[ -z $CAPACITY_COMMAND ]] && CAPACITY_COMMAND='cat /sys/class/power_supply/BAT1/capacity'
+[[ -z $STATUS_COMMAND ]] && STATUS_COMMAND='cat /sys/class/power_supply/BAT1/status'
+
 while :
 do
     # Get values
@@ -27,7 +34,9 @@ do
     fday=$(date '+%A')
     fdate=$(date '+%d.%m.%Y')
     ftime=$(date '+%l:%M')
-    
+    capacity=$(eval $CAPACITY_COMMAND)
+    status=$(eval $STATUS_COMMAND)
+
     if (($cpu >= $cpu_healthy));
     then
         cpus="CPU <span color=\"$hot\">$cpu</span>"
@@ -42,9 +51,40 @@ do
         gpus="GPU <span color=\"$healthy\">$gpu</span>"
     fi
 
+    if [[ $capacity != "disabled" ]]
+    then
+        if (($capacity >= 95));
+        then
+            battery="<span color=\"$bat100\"> </span>"
+        elif (( $capacity >= 75));
+        then
+            battery="<span color=\"$bat75\"> </span>"
+        elif (( $capacity >= 50));
+        then
+            battery="<span color=\"$bat50\"> </span>"
+        elif (( $capacity >= 25));
+        then
+            battery="<span color=\"$bat25\"> </span>"
+        else
+            battery="<span color=\"$bat0\"> </span>"
+        fi
+        if [[ $status == "Discharging" ]]
+        then
+            plugged="<span color=\"$bat0\"></span>"
+        else
+            plugged="<span color=\"$bat100\"></span>"
+        fi
+    fi
+
     _date="<span color=\"$accent\">$fdate</span>"
     _time="<span color=\"$accent\">$ftime</span>"
 
-    echo "<span color=\"$color\">  $fday $_date   $cpus $gpus   $_time</span>"
+    # Output the result
+    if [[ $capacity != "disabled" ]]
+    then
+        echo "<span color=\"$color\">  $fday $_date   $cpus $gpus   $_time $battery $capacity $plugged</span>"
+    else
+        echo "<span color=\"$color\">  $fday $_date   $cpus $gpus   $_time</span>"
+    fi
     sleep 5
 done
