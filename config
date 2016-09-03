@@ -90,7 +90,7 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # workspace names
-set $w1 "1 "
+set $w1 "1 "
 set $w2 "2 "
 set $w3 "3 "
 set $w4 "4 "
@@ -184,12 +184,12 @@ bindsym Mod3+Shift+9 move container to workspace $ww9
 bindsym Mod3+Shift+0 move container to workspace $ww10
 
 assign [class="Firefox"] $w1
+assign [class="chromium"] $w1
 assign [class="Electrum"] $w9
 assign [class="Steam"] $w8
 assign [class="Mist"] $w9
 assign [class="telegram-desktop"] $w10
 assign [class="spotify"] $ww1
-assign [class="chromium"] $ww2
 assign [class="Zeal"] $ww3
 
 # reload the configuration file
@@ -272,7 +272,7 @@ bar {
 set $lockcmd "~/.config/i3/bin/lock"
 set $syscmd "~/.config/i3/bin/sys"
 set $fm "nautilus"
-set $www "firefox"
+set $www "chromium"
 
 # custom bindings
 bindsym $mod+Shift+a exec pavucontrol
